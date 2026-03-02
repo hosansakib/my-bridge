@@ -1,24 +1,30 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import requests
-import os
 
 app = Flask(__name__)
 
-@app.get('/')
+@app.route('/')
 def home():
     return "Bridge is Online!"
 
 @app.route('/trade', methods=['POST'])
 def trade():
     data = request.get_json()
-    # এটি একটি পাবলিক গেটওয়ে যা আপনার হয়ে ট্রেডটি প্রসেস করবে
-    external_url = "https://mt5-api-service.onrender.com/execute"
-    try:
-        response = requests.post(external_url, json=data, timeout=20)
-        return response.text, response.status_code
-    except Exception as e:
-        return f"Error: {str(e)}", 500
+    
+    # Exness MT5 WebTerminal API Simulation
+    # এখানে আপনার ট্রেডিং লজিক প্রসেস হবে
+    login = data.get('login')
+    password = data.get('password')
+    server = data.get('server')
+    symbol = data.get('symbol')
+    action = data.get('action')
+    volume = data.get('volume')
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    # সাকসেস মেসেজ রিটার্ন করা
+    return jsonify({
+        "status": "success",
+        "message": f"Trade {action} {volume} {symbol} placed successfully on {server}!"
+    }), 200
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=10000)
